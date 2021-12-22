@@ -9,10 +9,16 @@ namespace PhoneStation
     {
         public PortController portController { get; set; }
 
+        public Station(PortController controller)
+        {
+            portController = controller;
+        }
+
         public void OnPhoneStartingCall(object sender, StartingCallEventArgs args)
         {
             Console.WriteLine($"Вызов на станции: {System.Reflection.MethodInfo.GetCurrentMethod().Name}");
-            portController.Ports.LastOrDefault().PhoneCallingByStation(args);
+
+            portController.Ports[args.TargetPhoneNumber].PhoneCallingByStation(args);
         }
     }
 }

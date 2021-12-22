@@ -4,11 +4,11 @@ namespace PhoneStation
 {
     public class PortController
     {
-        private ICollection<Port> _ports;
+        private IDictionary<string, Port> _ports;
 
-        public IEnumerable<Port> Ports { get { return _ports; } }
+        public IDictionary<string, Port> Ports { get { return _ports; } }
         
-        public PortController(ICollection<Port> ports)
+        public PortController(IDictionary<string, Port> ports)
         {
             _ports = ports;
         }

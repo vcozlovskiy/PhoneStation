@@ -13,10 +13,12 @@ namespace PhoneStation
             Phone phone1 = new Phone("321");
             Port port1 = new Port();
 
-            Station station = new Station()
-            {
-                portController = new PortController(new List<Port>() { port, port1})
-            };
+            Dictionary<string, Port> pairs = new Dictionary<string, Port>();
+
+            pairs.Add("123", port);
+            pairs.Add("321", port1);
+
+            Station station = new Station(new PortController(pairs));
 
             phone1.StartCall += port.OnPhoneStartingCall;
             port1.StartCall += station.OnPhoneStartingCall;
