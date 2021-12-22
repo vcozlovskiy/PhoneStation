@@ -14,7 +14,7 @@ namespace PhoneStation
             portController = controller;
         }
 
-        public void PhoneStartingCall(object sender, StartingCallEventArgs args)
+        public void PhoneStartingCall(object sender, CallEventArgs args)
         {
             Console.WriteLine($"Вызов на станции");
 

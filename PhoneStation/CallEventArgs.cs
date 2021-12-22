@@ -7,14 +7,17 @@ using PhoneStation;
 
 namespace PhoneStation
 {
-    public class StartingCallEventArgs
+    public class CallEventArgs
     {
-        public StartingCallEventArgs(string sourcePhoneNumber, string targetPhoneNumber )
+        public string SourcePhoneNumber { get; }
+        public string TargetPhoneNumber { get; }
+        public DateTime TimeCall { get; }
+
+        public CallEventArgs(string sourcePhoneNumber, string targetPhoneNumber )
         {
             SourcePhoneNumber = sourcePhoneNumber;
             TargetPhoneNumber = targetPhoneNumber;
+            TimeCall = DateTime.Now;
         }
-        public string SourcePhoneNumber { get; }
-        public string TargetPhoneNumber { get; }
     }
 }

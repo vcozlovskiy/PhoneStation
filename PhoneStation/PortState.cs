@@ -10,5 +10,7 @@ namespace PhoneStation
     {
         Busy,
         Free,
+        Disabled,
+        Enabled,
     }
 }

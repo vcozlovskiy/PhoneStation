@@ -9,7 +9,7 @@ namespace PhoneStation
 {
     public class Phone
     {
-        public event EventHandler<StartingCallEventArgs> StartCall;
+        public event EventHandler<CallEventArgs> StartCall;
 
         public CallLogger CallLogger { get; }
 
@@ -23,15 +23,11 @@ namespace PhoneStation
 
         public void Call(string targetPhoneNumber)
         {
-            if (targetPhoneNumber == PhoneNumber)
-            {
-                throw new Exception();
-            }
             Console.WriteLine($"Вызов начат {PhoneNumber}");
-            OnStartCall(this, new StartingCallEventArgs(PhoneNumber, targetPhoneNumber));
+            OnStartCall(this, new CallEventArgs(PhoneNumber, targetPhoneNumber));
         }
 
-        protected virtual void OnStartCall(object sender, StartingCallEventArgs args)
+        protected virtual void OnStartCall(object sender, CallEventArgs args)
         {
             if (StartCall != null)
             {
@@ -44,7 +40,7 @@ namespace PhoneStation
             }
         }
 
-        public void OnRequest(object sender, StartingCallEventArgs args)
+        public void OnRequest(object sender, CallEventArgs args)
         {
             Console.WriteLine($"Вызов вернулся на другой телефон {PhoneNumber}");
             CallLogger.AddLoggsIn(this, args);

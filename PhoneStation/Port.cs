@@ -8,15 +8,15 @@ namespace PhoneStation
     public class Port
     {
         public PortState State { get; private set; }
-        public event EventHandler<StartingCallEventArgs> StartCall;
-        public event EventHandler<StartingCallEventArgs> PhoneReqest;
+        public event EventHandler<CallEventArgs> StartCall;
+        public event EventHandler<CallEventArgs> PhoneReqest;
 
         public Port()
         {
             State = PortState.Free;
         }
 
-        public void OnPhoneStartingCall(object sender, StartingCallEventArgs args)
+        public void OnPhoneStartingCall(object sender, CallEventArgs args)
         {
             Console.WriteLine($"Вызов {(sender as Phone).PhoneNumber} на порту");
 
@@ -28,7 +28,7 @@ namespace PhoneStation
             }
         }
 
-        protected virtual void OnCallingFromStationToPort(object sender, StartingCallEventArgs args)
+        protected virtual void OnCallingFromStationToPort(object sender, CallEventArgs args)
         {
             if (StartCall != null)
             {
@@ -39,7 +39,7 @@ namespace PhoneStation
                 throw new NullReferenceException();
             }
         }
-        public void CallFromStationToPort(StartingCallEventArgs args)
+        public void CallFromStationToPort(CallEventArgs args)
         {
             Console.WriteLine($"Вызов вернулся на порт {args.TargetPhoneNumber}");
             if (State == PortState.Free)
@@ -52,7 +52,7 @@ namespace PhoneStation
             }
         }
 
-        protected void OnReqest(object sender, StartingCallEventArgs args)
+        protected void OnReqest(object sender, CallEventArgs args)
         {
             if (PhoneReqest != null)
             {
