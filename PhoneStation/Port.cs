@@ -9,6 +9,7 @@ namespace PhoneStation
     {
         public PortState State { get; private set; }
         public event EventHandler<StartingCallEventArgs> StartCall;
+        public event EventHandler<StartingCallEventArgs> PhoneReqest;
 
         public Port()
         {
@@ -17,35 +18,47 @@ namespace PhoneStation
 
         public void OnPhoneStartingCall(object sender, StartingCallEventArgs args)
         {
-            Console.WriteLine($"Вызов на порту {args.SourcePhoneNumber}: {System.Reflection.MethodInfo.GetCurrentMethod().Name}");
+            Console.WriteLine($"Вызов {(sender as Phone).PhoneNumber} на порту");
 
             if (State == PortState.Free)
             {
                 State = PortState.Busy;
-                OnStartingCall(this, args);
+                OnCallingFromStationToPort(this, args);
+                State = PortState.Free;
             }
         }
 
-        protected virtual void OnStartingCall(object sender, StartingCallEventArgs args)
+        protected virtual void OnCallingFromStationToPort(object sender, StartingCallEventArgs args)
         {
-            StartCall(sender, args);
+            if (StartCall != null)
+            {
+                StartCall(sender, args);
+            }
+            else
+            {
+                throw new NullReferenceException();
+            }
         }
-        public void PhoneCallingByStation(StartingCallEventArgs args)
+        public void CallFromStationToPort(StartingCallEventArgs args)
         {
-            Console.WriteLine($"Вызов вернулся на порт {args.TargetPhoneNumber}: {System.Reflection.MethodInfo.GetCurrentMethod().Name}");
+            Console.WriteLine($"Вызов вернулся на порт {args.TargetPhoneNumber}");
             if (State == PortState.Free)
             {
-                State = PortState.Busy;
                 OnReqest(this, args);
             }
+            else
+            {
+                Console.WriteLine("Port is busy");
+            }
         }
-
-        public event EventHandler<StartingCallEventArgs> PhoneReqest;
 
         protected void OnReqest(object sender, StartingCallEventArgs args)
         {
-
-            PhoneReqest(sender, args);
+            if (PhoneReqest != null)
+            {
+                PhoneReqest(sender, args);
+                State = PortState.Free;
+            }
         }
     }
 }

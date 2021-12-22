@@ -15,21 +15,19 @@ namespace PhoneStation
 
             Dictionary<string, Port> pairs = new Dictionary<string, Port>();
 
-            pairs.Add("123", port);
-            pairs.Add("321", port1);
+            pairs.Add(phone.PhoneNumber, port);
+            pairs.Add(phone1.PhoneNumber, port1);
 
-            Station station = new Station(new PortController(pairs));
+            Station station = new Station(pairs);
+            station.Bind(port, phone);
+            station.Bind(port1, phone1);
 
-            phone1.StartCall += port.OnPhoneStartingCall;
-            port1.StartCall += station.OnPhoneStartingCall;
+            phone1.Call("123");
 
-            phone.StartCall += port.OnPhoneStartingCall;
-            port.StartCall += station.OnPhoneStartingCall;
-
-            port.PhoneReqest += phone.OnRequest;
-            port1.PhoneReqest += phone1.OnRequest;
+            Console.WriteLine();
 
             phone.Call("321");
+
         }
     }
 }

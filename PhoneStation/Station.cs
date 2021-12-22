@@ -7,18 +7,30 @@ namespace PhoneStation
 {
     public class Station
     {
-        public PortController portController { get; set; }
+        public Dictionary<string, Port> portController { get; }
 
-        public Station(PortController controller)
+        public Station(Dictionary<string, Port> controller)
         {
             portController = controller;
         }
 
-        public void OnPhoneStartingCall(object sender, StartingCallEventArgs args)
+        public void PhoneStartingCall(object sender, StartingCallEventArgs args)
         {
-            Console.WriteLine($"Вызов на станции: {System.Reflection.MethodInfo.GetCurrentMethod().Name}");
+            Console.WriteLine($"Вызов на станции");
 
-            portController.Ports[args.TargetPhoneNumber].PhoneCallingByStation(args);
+            portController[args.TargetPhoneNumber].CallFromStationToPort(args);
+        }
+
+        public void AddNewPair(string number, Port port)
+        {
+            portController.Add(number, port);
+        }
+
+        public void Bind(Port port, Phone phone)
+        {
+            phone.StartCall += port.OnPhoneStartingCall;
+            port.StartCall += PhoneStartingCall;
+            port.PhoneReqest += phone.OnRequest;
         }
     }
 }
