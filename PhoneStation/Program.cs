@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NLog;
 
 namespace PhoneStation
 {
@@ -13,27 +14,34 @@ namespace PhoneStation
             Phone phone1 = new Phone("321");
             Port port1 = new Port();
 
-            User user = new User();
-            User user1 = new User();
+            User user = new User(port, phone);
+            User user1 = new User(port1, phone1);
+            user.Account = 100;
+            user1.Account = 100;
 
-            Dictionary<string, Port> pairs = new Dictionary<string, Port>();
+            DateTime dateTimest = DateTime.Now;
 
-            pairs.Add(phone.PhoneNumber, port);
-            pairs.Add(phone1.PhoneNumber, port1);
+            List<User> users = new List<User>();
+            users.Add(user);
+            users.Add(user1);
+
+            Dictionary<Phone, Port> pairs = new Dictionary<Phone, Port>();
+
+            pairs.Add(phone, port);
+            pairs.Add(phone1, port1);
 
             Station station = new Station(pairs);
-            station.Bind(port, phone);
-            station.Bind(port1, phone1);
+            BillingSystem billingSystem = new BillingSystem(station);
+            billingSystem.RegisteredUsers = users;
+
+            station.CallStarted += billingSystem.OnCallRecord;
 
             user1.Phone = phone;
             user.Phone = phone1;
 
-            phone1.Call("123"); //phone1 number - "321"
+            phone1.Call("123"); 
 
-            Console.WriteLine();
-
-            user.CallLogsShow();
-            user1.CallLogsShow();
+            DateTime dateTimeend = DateTime.Now;
         }
     }
 }

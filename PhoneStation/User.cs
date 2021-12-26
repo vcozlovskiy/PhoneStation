@@ -6,15 +6,20 @@ using System.Threading.Tasks;
 
 namespace PhoneStation
 {
-    class User
+    public class User
     {
         public Phone Phone { get; set; }
 
-        public float account { get; }
+        public Port Port { get; set; }
 
-        public void CallLogsShow()
+        public int Tariff { get; set; }
+
+        public float Account { get; set; }
+
+        public User(Port port, Phone phone)
         {
-            Phone.CallLogger.LogsShow();
+            Port = port;
+            Phone = phone;
         }
     }
 }

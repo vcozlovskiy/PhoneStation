@@ -11,12 +11,16 @@ namespace PhoneStation
     {
         public string SourcePhoneNumber { get; }
         public string TargetPhoneNumber { get; }
+        public bool IncommingCall { get; set; }
         public DateTime TimeCall { get; }
+
+        public DateTime TimeEndCall { get; set; }
 
         public CallEventArgs(string sourcePhoneNumber, string targetPhoneNumber )
         {
             SourcePhoneNumber = sourcePhoneNumber;
             TargetPhoneNumber = targetPhoneNumber;
+            IncommingCall = false;
             TimeCall = DateTime.Now;
         }
     }

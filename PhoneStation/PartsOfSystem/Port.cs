@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PhoneStation.Exceptions;
 using System.Text;
 
 namespace PhoneStation
@@ -11,20 +12,27 @@ namespace PhoneStation
         public event EventHandler<CallEventArgs> StartCall;
         public event EventHandler<CallEventArgs> PhoneReqest;
 
+        public int PortID { get; }
+        private static int portsCount;
+
         public Port()
         {
             State = PortState.Free;
+
+            PortID = ++portsCount;
         }
 
-        public void OnPhoneStartingCall(object sender, CallEventArgs args)
+        public void OnPhoneStartingInCall(object sender, CallEventArgs args)
         {
-            Console.WriteLine($"Вызов {(sender as Phone).PhoneNumber} на порту");
-
             if (State == PortState.Free)
             {
                 State = PortState.Busy;
                 OnCallingFromStationToPort(this, args);
                 State = PortState.Free;
+            }
+            else
+            {
+                throw new PortIsBusy();
             }
         }
 
@@ -36,19 +44,18 @@ namespace PhoneStation
             }
             else
             {
-                throw new NullReferenceException();
+                throw new PhoneNotConnectedToStationException();
             }
         }
         public void CallFromStationToPort(CallEventArgs args)
         {
-            Console.WriteLine($"Вызов вернулся на порт {args.TargetPhoneNumber}");
             if (State == PortState.Free)
             {
                 OnReqest(this, args);
             }
             else
             {
-                Console.WriteLine("Port is busy");
+                throw new PortIsBusy();
             }
         }
 
@@ -58,6 +65,10 @@ namespace PhoneStation
             {
                 PhoneReqest(sender, args);
                 State = PortState.Free;
+            }
+            else
+            {
+                throw new PortIsBusy();
             }
         }
     }

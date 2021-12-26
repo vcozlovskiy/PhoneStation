@@ -6,27 +6,25 @@ using System.Threading.Tasks;
 
 namespace PhoneStation
 {
-    public class CallLogger
+    public class CallList
     {
         private List<CallEventArgs> _logsIn;
         private List<CallEventArgs> _logsOut;
 
-        public CallLogger()
+        public CallList()
         {
             _logsIn = new List<CallEventArgs>();
             _logsOut = new List<CallEventArgs>();
         }
 
-        public void AddLoggsIn(object sender, CallEventArgs args)
+        public void AddCallIn(object sender, CallEventArgs args)
         {
             _logsIn.Add(args);
-            Console.WriteLine($"Лог входящий записан {(sender as Phone).PhoneNumber}");
         }
 
-        public void AddLoggsOut(object sender, CallEventArgs args)
+        public void AddCallOut(object sender, CallEventArgs args)
         {
             _logsOut.Add(args);
-            Console.WriteLine($"Лог исходящий записан {(sender as Phone).PhoneNumber}");
         }
 
         public void LogsShow()

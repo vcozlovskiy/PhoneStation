@@ -10,14 +10,10 @@ namespace PhoneStation
     public class Phone
     {
         public event EventHandler<CallEventArgs> StartCall;
-
-        public CallLogger CallLogger { get; }
-
         public string PhoneNumber { get; private set; }
 
         public Phone(string phoneNumber)
         {
-            CallLogger = new CallLogger();
             PhoneNumber = phoneNumber;
         }
 
@@ -32,7 +28,6 @@ namespace PhoneStation
             if (StartCall != null)
             {
                 StartCall(this, args);
-                CallLogger.AddLoggsOut(this, args);
             }
             else
             {
@@ -42,15 +37,23 @@ namespace PhoneStation
 
         public void OnRequest(object sender, CallEventArgs args)
         {
-            Console.WriteLine($"Вызов вернулся на другой телефон {PhoneNumber}");
-            CallLogger.AddLoggsIn(this, args);
-            Accept();
+            if (sender is Port port) 
+            {
+                Accept(port, args);
+            }
+            else
+            {
+
+            }
         }
 
-        public void Accept()
+        private void Accept(Port port, CallEventArgs args)
         {
-            Console.WriteLine("Вызов принят");
-            Console.WriteLine("Вызов завершён");
+            if(port != null)
+            {
+                args.IncommingCall = true;
+                port.OnPhoneStartingInCall(port,args);
+            }
         }
     }
 }
